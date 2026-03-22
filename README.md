@@ -4,7 +4,7 @@
 
 The system works as a pipeline: a local Ubuntu VM runs your application and Node Exporter, Prometheus scrapes metrics every 10 seconds, and a Python monitor script polls Prometheus. When CPU or RAM crosses 75%, the script uses Boto3 to launch an EC2 instance and deploy your app automatically.
 
-Generated chart: docs/hybrid_cloud_architecture.png
+Generated chart: [docs/hybrid_cloud_architecture.png](docs/hybrid_cloud_architecture.png)
 
 ## Deliverable 1: Step-by-Step Implementation
 
@@ -147,7 +147,7 @@ Within about 60 seconds, the monitor should detect high load and launch an EC2 i
 ## Deliverable 3: Repository Structure
 
 ```text
-hybrid-cloud-autoscale/
+.
 ├── README.md
 ├── app/
 │   └── app.py
@@ -170,10 +170,9 @@ hybrid-cloud-autoscale/
 ## Git Push Commands
 
 ```bash
-git init && git add .
+git add .
 git commit -m "Hybrid cloud auto-scaling: local VM to AWS"
-git remote add origin https://github.com/<your-username>/hybrid-cloud-autoscale.git
-git push -u origin main
+git push origin main
 ```
 
 ## Key Operational Flow

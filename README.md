@@ -336,7 +336,8 @@ sudo systemctl enable --now grafana-server
 **Verify it works:**
 
 ```bash
-sudo systemctl status grafana-server   # should be "active (running)"
+sudo systemctl start grafana-server
+sudo systemctl status grafana-server   # should be "active (running)sudo journalctl -u grafana-server -n 50 --no-pager  #If it fails to start, check the logs:
 ```
 ![alt text](grafana1.png)
 

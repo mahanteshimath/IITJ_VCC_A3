@@ -98,15 +98,15 @@ Before starting, make sure you have:
 
    | Setting | Value |
    |---|---|
-   | Name | `mh-vm` |
+   | Name | `mh-vm1` |
    | Type / Version | Linux / Ubuntu (64-bit) |
-   | CPUs | **3** (minimum — needed to generate meaningful CPU metrics) |
-   | RAM | **3710 MB** (2 GB minimum) |
+   | CPUs | **1** (minimum — needed to generate meaningful CPU metrics) |
+   | RAM | **8192 MB** (8 GB minimum) |
    | Disk | **25 GB** (dynamically allocated VDI) |
 
 
-![alt text](image.png)
-
+![alt text](mh-vm1-config.png)
+![alt text](ip-internet.png)
 
 4. **Attach the ISO** to the VM's optical drive and boot it.
 5. **Install Ubuntu** — follow the installer defaults; create a user (e.g., `ubuntu`).

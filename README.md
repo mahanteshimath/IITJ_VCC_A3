@@ -652,3 +652,13 @@ git add .
 git commit -m "Hybrid cloud auto-scaling: local VM to AWS"
 git push origin main
 ```
+
+
+## Live Service URLs
+
+| Service | Live URL |
+|---|---|
+| Grafana | [http://192.168.1.40:3000](http://192.168.1.40:3000) |
+| Prometheus | [http://192.168.1.40:9090](http://192.168.1.40:9090) |
+| Flask App | [http://192.168.1.40:5000](http://192.168.1.40:5000) |
+| Node Exporter | [http://192.168.1.40:9100/metrics](http://192.168.1.40:9100/metrics) |

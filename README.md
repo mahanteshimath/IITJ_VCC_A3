@@ -219,12 +219,12 @@ Create or replace file:
 ```bash
 cat > monitoring/prometheus.yml << 'EOF'
 global:
-   scrape_interval: 10s
+  scrape_interval: 10s
 
 scrape_configs:
-   - job_name: 'node'
-      static_configs:
-         - targets: ['localhost:9100']
+  - job_name: 'node'
+    static_configs:
+      - targets: ['localhost:9100']
 EOF
 ```
 

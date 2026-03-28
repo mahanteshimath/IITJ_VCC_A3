@@ -723,7 +723,8 @@ Or terminate from the **AWS EC2 Console → Instances → select → Instance St
 | Problem | Cause | Fix |
 |---|---|---|
 | `curl localhost:9100/metrics` returns nothing | Node Exporter not running | `sudo systemctl restart node_exporter` and check `systemctl status` |
-| Monitor prints `Monitor error: ...` | Prometheus not reachable | Verify Prometheus is running: `curl http://localhost:9090/-/healthy` |
+| Monitor prints `Monitor error: connection refused` | Prometheus not reachable | Verify Prometheus is running: `curl http://localhost:9090/-/healthy` |
+| Monitor prints `Monitor error: Unable to locate credentials` | AWS CLI not configured on VM | Run `aws configure` on the VM and enter Access Key, Secret Key, region `us-east-1` |
 | CPU stays below 75% during stress test | VM has too many cores | Increase `--cpu` count in `load_test.sh` or reduce VM CPU cores to 2 |
 | `botocore.exceptions.NoCredentialsError` | AWS CLI not configured | Run `aws configure` and enter valid credentials |
 | `botocore.exceptions.ClientError: InvalidAMIID` | Wrong AMI for your region | Look up the correct Ubuntu 22.04 AMI ID for your `AWS_REGION` |

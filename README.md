@@ -384,7 +384,7 @@ Before the auto-scale script can launch EC2 instances, you need to set up AWS re
 
 1. Go to **EC2 Console → AMIs → Public images**.
 2. Search for `ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*` owned by `099720109477` (Canonical).
-3. **Copy the AMI ID** for your region (e.g., `ami-0c55b159cbfafe1f0` for `ap-south-1`).
+3. **Copy the AMI ID** for your region (e.g., `ami-0c55b159cbfafe1f0` for `ap-east-1`).
 
 #### 5e. Install AWS CLI & Configure Credentials on the VM
 
@@ -423,7 +423,7 @@ PROMETHEUS_URL = "http://localhost:9090/api/v1/query"
 THRESHOLD = 75.0          # percentage — scale when CPU or RAM exceeds this
 CHECK_INTERVAL = 30       # seconds between each Prometheus poll
 
-AWS_REGION = "ap-south-1"                # ← your AWS region
+AWS_REGION = "ap-east-1"                # ← your AWS region
 AMI_ID = "ami-0c55b159cbfafe1f0"         # ← Ubuntu 22.04 AMI for your region
 INSTANCE_TYPE = "t2.micro"               # ← free-tier eligible
 KEY_NAME = "your-key-pair"               # ← name of your EC2 key pair (Step 5b)
@@ -647,7 +647,7 @@ All tuneable parameters live in `autoscale/config.py`:
 | `PROMETHEUS_URL` | `http://localhost:9090/api/v1/query` | Prometheus query API endpoint |
 | `THRESHOLD` | `75.0` | CPU/memory percentage that triggers scaling |
 | `CHECK_INTERVAL` | `30` | Seconds between each monitoring check |
-| `AWS_REGION` | `ap-south-1` | AWS region for the EC2 instance |
+| `AWS_REGION` | `ap-east-1` | AWS region for the EC2 instance |
 | `AMI_ID` | `ami-0c55b159cbfafe1f0` | Ubuntu AMI ID (region-specific — **must update**) |
 | `INSTANCE_TYPE` | `t2.micro` | EC2 instance type (free-tier eligible) |
 | `KEY_NAME` | `your-key-pair` | EC2 key pair name (**must update**) |

@@ -128,6 +128,10 @@ Before starting, make sure you have:
    sudo apt update && sudo apt upgrade -y
    sudo apt install -y python3 python3-pip curl wget net-tools git stress
    ```
+   ![alt text](image-3.png)
+   ![alt text](image-4.png)
+
+   ![alt text](image-5.png)
 
 9. **Clone this repository** inside the VM:
 
@@ -135,7 +139,7 @@ Before starting, make sure you have:
    git clone https://github.com/mahanteshimath/IITJ_VCC_A3.git
    cd IITJ_VCC_A3
    ```
-
+![alt text](image-6.png)
 ---
 
 ### Step 2: Install & Configure Node Exporter
@@ -143,12 +147,12 @@ Before starting, make sure you have:
 Node Exporter exposes hardware metrics that Prometheus will scrape.
 
 ```bash
-# Download Node Exporter v1.7.0
-wget https://github.com/prometheus/node_exporter/releases/download/v1.7.0/node_exporter-1.7.0.linux-amd64.tar.gz
+# Download Node Exporter v1.8.2 (latest stable)
+wget https://github.com/prometheus/node_exporter/releases/download/v1.8.2/node_exporter-1.8.2.linux-amd64.tar.gz
 
 # Extract and install the binary
-tar -xvf node_exporter-1.7.0.linux-amd64.tar.gz
-sudo mv node_exporter-1.7.0.linux-amd64/node_exporter /usr/local/bin/
+tar -xvf node_exporter-1.8.2.linux-amd64.tar.gz
+sudo mv node_exporter-1.8.2.linux-amd64/node_exporter /usr/local/bin/
 
 # Create a dedicated system user (no login shell, no home dir)
 sudo useradd -rs /bin/false node_exporter

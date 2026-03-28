@@ -175,8 +175,12 @@ sudo systemctl status node_exporter
 curl -s http://localhost:9100/metrics | head -20
 ```
 
+
+
+![alt text](image-7.png)
 > If `curl` shows metrics output, Node Exporter is running correctly.
 
+![alt text](image-8.png)
 ---
 
 ### Step 3: Install & Configure Prometheus
@@ -194,7 +198,7 @@ sudo mv prometheus-2.48.0.linux-amd64 /opt/prometheus
 # Copy the config from this repo (scrapes localhost:9100 every 10s)
 sudo cp monitoring/prometheus.yml /opt/prometheus/prometheus.yml
 ```
-
+![alt text](image-9.png)
 **What the config does** (`monitoring/prometheus.yml`):
 
 ```yaml

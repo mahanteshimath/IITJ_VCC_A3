@@ -497,7 +497,7 @@ git pull origin main
 ```bash
 nano ~/IITJ_VCC_A3/autoscale/config.py
 ```
-
+![alt text](nano.png)
 Ensure it looks like this:
 ```python
 """Configuration for hybrid cloud auto-scaling."""

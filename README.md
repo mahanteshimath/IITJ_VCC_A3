@@ -234,9 +234,6 @@ sudo cp monitoring/prometheus.yml /opt/prometheus/prometheus.yml
 pkill prometheus || true
 cd /opt/prometheus && ./prometheus &
 
-# Validate
-curl -s 'http://localhost:9090/api/v1/query?query=up{job="node"}' | python3 -m json.tool
-curl -s 'http://localhost:9090/api/v1/query?query=node_cpu_seconds_total' | python3 -m json.tool
 ```
 
 **What the config does** (`monitoring/prometheus.yml`):

@@ -662,3 +662,9 @@ git push origin main
 | Prometheus | [http://192.168.1.40:9090](http://192.168.1.40:9090) |
 | Flask App | [http://192.168.1.40:5000](http://192.168.1.40:5000) |
 | Node Exporter | [http://192.168.1.40:9100/metrics](http://192.168.1.40:9100/metrics) |
+
+## Node Exporter 
+![alt text](image-11.png)
+-----
+## Prometheus
+![alt text](image-12.png)

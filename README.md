@@ -446,6 +446,13 @@ cd ~/IITJ_VCC_A3
 
 # Ubuntu 23.04+ / Python 3.12 may block global pip installs (PEP 668).
 # Create and use a virtual environment instead.
+# Install venv tooling first (fixes "ensurepip is not available" error)
+sudo apt update
+sudo apt install -y python3-venv python3-full
+
+# If the command above cannot find python3-venv on your distro, use:
+# sudo apt install -y python3.12-venv
+
 python3 -m venv .venv
 source .venv/bin/activate
 pip install --upgrade pip

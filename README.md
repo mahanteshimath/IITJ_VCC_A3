@@ -499,6 +499,42 @@ aws sts get-caller-identity
 # Should print your account ID and IAM user ARN
 ```
 
+> ⚠️ **If `aws configure` does not work** (hangs, no prompt, or `command not found`), write the credentials file directly:
+
+```bash
+# Install AWS CLI if missing
+sudo apt update && sudo apt install -y awscli
+
+# Write credentials directly
+mkdir -p ~/.aws
+
+cat > ~/.aws/credentials << 'EOF'
+[default]
+aws_access_key_id = AKIA3MYREF4BBRCQDNTC
+aws_secret_access_key = <your-secret-key>
+EOF
+
+cat > ~/.aws/config << 'EOF'
+[default]
+region = us-east-1
+output = json
+EOF
+
+# Verify
+aws sts get-caller-identity
+```
+
+Expected output:
+```json
+{
+    "UserId": "...",
+    "Account": "...",
+    "Arn": "arn:aws:iam::...:user/hybrid-cloud-autoscaler"
+}
+```
+
+If this command succeeds, boto3 will find the credentials automatically and the monitor script will be able to launch EC2 instances.
+
 ---
 
 #### ✅ 5f. Update `autoscale/config.py`

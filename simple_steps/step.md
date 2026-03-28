@@ -29,28 +29,81 @@ source venv/bin/activate
 pip install flask
 ```
 
-Create **`app.py`**:
+Create **`app.py`** (detailed):
 
-```python
+1. Confirm you are in the app folder and virtual environment is active:
+
+```bash
+cd ~/flask-app
+source venv/bin/activate
+which python
+```
+
+Expected result: Python path should point to `~/flask-app/venv/bin/python`.
+
+2. Create the file from terminal:
+
+```bash
+cat > app.py << 'EOF'
 from flask import Flask
 
 app = Flask(__name__)
 
+
 @app.route("/")
 def home():
-	return "<h1>Running on Local VM - Baseline Workload</h1>"
+	return "Running on Local VM"
+
 
 if __name__ == "__main__":
 	app.run(host="0.0.0.0", port=5000)
+EOF
 ```
 
-Start it in the background:
+3. (Optional) Check file content quickly:
 
 ```bash
-nohup python3 app.py &
+sed -n '1,120p' app.py
 ```
 
-Verify: `curl http://localhost:5000` should return the HTML heading. [dev](https://dev.to/jj_dev/use-user-data-script-run-a-flask-app-im3)
+4. What this app does:
+   - imports Flask and creates an app object.
+   - defines `/` route returning a simple baseline message.
+   - runs on `0.0.0.0:5000` so it is reachable from your host/LAN (based on VM networking).
+
+5. Run the app in foreground first (recommended):
+
+```bash
+python app.py
+```
+
+You should see output similar to: `Running on http://0.0.0.0:5000`.
+
+6. In another terminal, verify response:
+
+```bash
+curl -s http://localhost:5000
+```
+
+Expected result: `Running on Local VM`
+
+7. Run in background after verification:
+
+```bash
+nohup python app.py > flask.log 2>&1 &
+tail -n 20 flask.log
+```
+
+8. Useful checks if it does not start:
+
+```bash
+source venv/bin/activate
+pip show flask
+ss -lntp | grep :5000
+pkill -f "python app.py" || true
+```
+
+If port `5000` is already in use, stop the old process and start again.
 
 ***
 

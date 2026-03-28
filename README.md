@@ -473,8 +473,32 @@ aws sts get-caller-identity
 
 #### ✅ 5f. Update `autoscale/config.py`
 
-The config file has been updated with the actual resource values:
+`autoscale/config.py` is the **single place** that controls all AWS settings. No other file needs to be changed for credentials or resource IDs.
 
+**What each line controls:**
+
+| Line | What it controls | Value set |
+|---|---|---|
+| `AWS_REGION` | Which AWS region to launch EC2 in | `us-east-1` |
+| `AMI_ID` | OS image used for the EC2 instance | `ami-00de3875b03809ec5` (Ubuntu 22.04, us-east-1) |
+| `INSTANCE_TYPE` | EC2 size (free-tier eligible) | `t2.micro` |
+| `KEY_NAME` | EC2 key pair name for SSH access | `hybrid-cloud-key` |
+| `SECURITY_GROUP` | Firewall rules allowing ports 22, 5000, 9090 | `sg-0312567d5a5a9df6d` |
+
+**How to apply it on the VM (inside mh-vm1):**
+
+**1. Pull latest from git** (recommended — already updated):
+```bash
+cd ~/IITJ_VCC_A3
+git pull origin main
+```
+
+**2. Or open and verify manually:**
+```bash
+nano ~/IITJ_VCC_A3/autoscale/config.py
+```
+
+Ensure it looks like this:
 ```python
 """Configuration for hybrid cloud auto-scaling."""
 
@@ -490,6 +514,8 @@ SECURITY_GROUP = "sg-0312567d5a5a9df6d"  # hybrid-cloud-sg
 
 INSTANCE_NAME_TAG = "AutoScaled-from-LocalVM"
 ```
+
+**3. Save and exit** (`Ctrl+O`, Enter, `Ctrl+X` in nano).
 
 ---
 

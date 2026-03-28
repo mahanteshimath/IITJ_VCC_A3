@@ -302,7 +302,7 @@ curl -s 'http://localhost:9090/api/v1/query?query=up' | python3 -m json.tool
 # Expected: "value": [..., "1"] meaning the node target is UP
 ```
 
-> You can also open `http://192.168.1.40:9090` in your host browser to use the Prometheus web UI.
+> You can also open `http://192.168.56.10:9090` in your host browser to use the Prometheus web UI.
 
 ---
 
@@ -343,7 +343,7 @@ sudo systemctl status grafana-server   # should be "active (running)"
 ![alt text](grafana2.png)
 **Configure Grafana** (from your host browser):
 
-1. Open `http://192.168.1.40:3000` — default login is `admin` / `admin` (you'll be prompted to change it).
+1. Open `http://192.168.56.10:3000` — default login is `admin` / `admin` (you'll be prompted to change it).
 2. **Add Prometheus as a data source:**
    - Go to ⚙️ **Configuration → Data Sources → Add data source**.
    - Select **Prometheus**.
@@ -697,10 +697,10 @@ git push origin main
 
 | Service | Live URL |
 |---|---|
-| Grafana | [http://192.168.56.10:3000](http://192.168.1.40:3000) |
-| Prometheus | [http://192.168.56.10:9090](http://192.168.1.40:9090) |
-| Flask App | [http://192.168.56.10:5000](http://192.168.1.40:5000) |
-| Node Exporter | [http://192.168.56.10:9100/metrics](http://192.168.1.40:9100/metrics) |
+| Grafana | [http://192.168.56.10:3000](http://192.168.56.10:3000) |
+| Prometheus | [http://192.168.56.10:9090](http://192.168.56.10:9090) |
+| Flask App | [http://192.168.56.10:5000](http://192.168.56.10:5000) |
+| Node Exporter | [http://192.168.56.10:9100/metrics](http://192.168.56.10:9100/metrics) |
 
 ## Node Exporter 
 ![alt text](image-11.png)

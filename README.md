@@ -34,6 +34,9 @@
               └───────────────────────┘
 ```
 
+<img width="1338" height="1622" alt="mermaid-diagram-2026-03-29-035717" src="https://github.com/user-attachments/assets/635b9231-c2d8-46b5-8683-d6e8f431baa2" />
+
+
 **How it works, end-to-end:**
 
 1. **Node Exporter** exposes hardware metrics (CPU, memory, disk, network) on port `9100`.

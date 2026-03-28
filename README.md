@@ -740,11 +740,11 @@ All tuneable parameters live in `autoscale/config.py`:
 | `PROMETHEUS_URL` | `http://localhost:9090/api/v1/query` | Prometheus query API endpoint |
 | `THRESHOLD` | `75.0` | CPU/memory percentage that triggers scaling |
 | `CHECK_INTERVAL` | `30` | Seconds between each monitoring check |
-| `AWS_REGION` | `ap-east-1` | AWS region for the EC2 instance |
-| `AMI_ID` | `ami-0c55b159cbfafe1f0` | Ubuntu AMI ID (region-specific — **must update**) |
+| `AWS_REGION` | `us-east-1` | AWS region for the EC2 instance |
+| `AMI_ID` | `ami-00de3875b03809ec5` | Ubuntu 22.04 AMI ID (us-east-1) |
 | `INSTANCE_TYPE` | `t2.micro` | EC2 instance type (free-tier eligible) |
-| `KEY_NAME` | `your-key-pair` | EC2 key pair name (**must update**) |
-| `SECURITY_GROUP` | `sg-xxxxxxxx` | EC2 security group ID (**must update**) |
+| `KEY_NAME` | `hybrid-cloud-key` | EC2 key pair name |
+| `SECURITY_GROUP` | `sg-0312567d5a5a9df6d` | EC2 security group ID |
 | `INSTANCE_NAME_TAG` | `AutoScaled-from-LocalVM` | Name tag applied to the launched instance |
 
 ---

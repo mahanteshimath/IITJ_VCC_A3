@@ -106,7 +106,7 @@ Before starting, make sure you have:
 
 
 ![alt text](mh-vm1-config.png)
-![alt text](ip-internet.png)
+
 
 4. **Attach the ISO** to the VM's optical drive and boot it.
 5. **Install Ubuntu** — follow the installer defaults; create a user (e.g., `ubuntu`).
@@ -128,10 +128,7 @@ Before starting, make sure you have:
    sudo apt update && sudo apt upgrade -y
    sudo apt install -y python3 python3-pip curl wget net-tools git stress
    ```
-   ![alt text](image-3.png)
-   ![alt text](image-4.png)
-
-   ![alt text](image-5.png)
+ ![alt text](ip-internet.png)
 
 9. **Clone this repository** inside the VM:
 

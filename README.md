@@ -317,6 +317,8 @@ sudo apt update && sudo apt install grafana -y
 sudo systemctl enable --now grafana-server
 ```
 
+![alt text](image-10.png)
+
 **Verify it works:**
 
 ```bash

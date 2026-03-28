@@ -443,13 +443,27 @@ INSTANCE_NAME_TAG = "AutoScaled-from-LocalVM"
 
 ```bash
 cd ~/IITJ_VCC_A3
-pip3 install -r autoscale/requirements.txt
+
+# Ubuntu 23.04+ / Python 3.12 may block global pip installs (PEP 668).
+# Create and use a virtual environment instead.
+python3 -m venv .venv
+source .venv/bin/activate
+pip install --upgrade pip
+pip install -r autoscale/requirements.txt
 ```
 
 This installs:
 - `boto3` — AWS SDK for Python (used to launch EC2)
 - `requests` — HTTP client (used to query Prometheus API)
 - `flask` — lightweight web framework (used by the sample app)
+
+If your shell shows `(.venv)` in the prompt, the environment is active.
+If not active in a new terminal, run:
+
+```bash
+cd ~/IITJ_VCC_A3
+source .venv/bin/activate
+```
 
 ---
 
@@ -461,7 +475,8 @@ You need **three terminal windows/tabs** inside the VM. Open each with `Ctrl+Alt
 
 ```bash
 cd ~/IITJ_VCC_A3
-python3 app/app.py
+source .venv/bin/activate
+python app/app.py
 ```
 
 Expected output:
@@ -476,7 +491,8 @@ Expected output:
 
 ```bash
 cd ~/IITJ_VCC_A3
-python3 autoscale/monitor_and_scale.py
+source .venv/bin/activate
+python autoscale/monitor_and_scale.py
 ```
 
 Expected output (repeated every 30 seconds):

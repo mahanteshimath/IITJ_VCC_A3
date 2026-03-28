@@ -120,8 +120,7 @@ Before starting, make sure you have:
    ip addr show          # note the IP address (e.g., 192.168.1.105)
    ping -c 3 google.com  # confirm internet access
    ```
-![alt text](image-1.png)
-![alt text](image-2.png)
+
 8. **Update the system and install base packages**:
 
    ```bash
@@ -136,7 +135,7 @@ Before starting, make sure you have:
    git clone https://github.com/mahanteshimath/IITJ_VCC_A3.git
    cd IITJ_VCC_A3
    ```
-![alt text](image-6.png)
+
 ---
 
 ### Step 2: Install & Configure Node Exporter
@@ -161,7 +160,7 @@ sudo cp monitoring/node_exporter.service /etc/systemd/system/node_exporter.servi
 sudo systemctl daemon-reload
 sudo systemctl enable --now node_exporter
 ```
-
+![alt text](node-install.png)
 **Verify it works:**
 
 ```bash
@@ -172,12 +171,11 @@ sudo systemctl status node_exporter
 curl -s http://localhost:9100/metrics | head -20
 ```
 
+![alt text](node-success1.png)
 
-
-![alt text](image-7.png)
 > If `curl` shows metrics output, Node Exporter is running correctly.
 
-![alt text](image-8.png)
+
 ---
 
 ### Step 3: Install & Configure Prometheus
@@ -207,9 +205,7 @@ sudo cp ~/IITJ_VCC_A3/monitoring/prometheus.yml /opt/prometheus/prometheus.yml
 pkill prometheus || true
 cd /opt/prometheus && ./prometheus &
 ```
-
-![alt text](image-9.png)
-
+![alt text](pro-success.png)
 **Create or overwrite from terminal (Ubuntu VM):**
 
 Go to repo root:
@@ -335,14 +331,14 @@ sudo apt -f install -y
 sudo systemctl enable --now grafana-server
 ```
 
-![alt text](image-10.png)
+
 
 **Verify it works:**
 
 ```bash
 sudo systemctl status grafana-server   # should be "active (running)"
 ```
-
+![alt text](grafana1.png)
 **Configure Grafana** (from your host browser):
 
 1. Open `http://192.168.1.40:3000` — default login is `admin` / `admin` (you'll be prompted to change it).

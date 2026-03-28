@@ -236,17 +236,6 @@ cd /opt/prometheus && ./prometheus &
 
 ```
 
-**What the config does** (`monitoring/prometheus.yml`):
-
-```yaml
-global:
-  scrape_interval: 10s        # collect metrics every 10 seconds
-
-scrape_configs:
-  - job_name: 'node'          # label for this scrape target
-    static_configs:
-      - targets: ['localhost:9100']   # Node Exporter endpoint
-```
 
 **Line-by-line explanation:**
 

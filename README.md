@@ -453,7 +453,7 @@ sudo apt install -y awscli
 aws configure
 ```
 
-When prompted, enter:
+![alt text](aws.png)
 
 ```
 AWS Access Key ID:     AKIA3MYREF4BBRCQDNTC

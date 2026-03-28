@@ -374,60 +374,92 @@ These are the exact same queries the auto-scale script uses, so what you see in 
 
 ---
 
-### Step 5: Configure AWS Credentials & Resources
+### Step 5: Configure AWS Credentials & Resources ✅
 
-Before the auto-scale script can launch EC2 instances, you need to set up AWS resources.
+All substeps completed successfully. Below is a full summary of everything that was done and the key values used.
 
-#### 5a. Create an IAM User
+---
 
-1. Log in to **AWS Console → IAM → Users → Add user**.
-2. Set user name (e.g., `hybrid-cloud-autoscaler`).
-3. Attach the policy **AmazonEC2FullAccess** directly.
-4. Create the user and **save the Access Key ID and Secret Access Key**.
+#### ✅ 5a. IAM User Created
 
-#### 5b. Create a Key Pair
+| Field | Value |
+|---|---|
+| **Username** | `hybrid-cloud-autoscaler` |
+| **Policy Attached** | `AmazonEC2FullAccess` (directly) |
+| **Access Key ID** | `AKIA3MYREF4BBRCQDNTC` |
 
-1. Go to **EC2 Console → Key Pairs → Create Key Pair**.
-2. Name it (e.g., `hybrid-cloud-key`), select `.pem` format.
-3. Download the `.pem` file and keep it safe.
+> ⚠️ **Never commit your Secret Access Key to git.** Enter it directly via `aws configure` on the VM.
 
-#### 5c. Create a Security Group
+**Steps taken:**
+1. AWS Console → IAM → Users → Add user → `hybrid-cloud-autoscaler`.
+2. Attached policy **AmazonEC2FullAccess** directly.
+3. Created access key and saved credentials securely.
 
-1. Go to **EC2 Console → Security Groups → Create Security Group**.
-2. Name it (e.g., `hybrid-cloud-sg`).
-3. Add **inbound rules**:
+---
 
-   | Type | Port | Source | Purpose |
-   |---|---|---|---|
-   | SSH | 22 | Your IP / 0.0.0.0/0 | SSH access to EC2 |
-   | Custom TCP | 5000 | 0.0.0.0/0 | Flask app |
-   | Custom TCP | 9090 | Your IP | Prometheus (optional) |
+#### ✅ 5b. Key Pair Created
 
-4. **Copy the Security Group ID** (e.g., `sg-0abc1234def56789`).
+| Field | Value |
+|---|---|
+| **Key Pair Name** | `hybrid-cloud-key` |
+| **Format** | `.pem` |
+| **Region** | `us-east-1` |
 
-#### 5d. Find Your Region's Ubuntu AMI
-
-1. Go to **EC2 Console → AMIs → Public images**.
-2. Search for `ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*` owned by `099720109477` (Canonical).
-3. **Copy the AMI ID** for your region (e.g., `ami-0c55b159cbfafe1f0` for `ap-east-1`).
-
-#### 5e. Install AWS CLI & Configure Credentials on the VM
+**Steps taken:**
+1. EC2 Console → Key Pairs → Create Key Pair → `hybrid-cloud-key`, `.pem` format.
+2. `.pem` file downloaded automatically. Move it to a safe location and set permissions:
 
 ```bash
-# Install AWS CLI
-sudo apt install -y awscli
+mv hybrid-cloud-key.pem ~/.ssh/
+chmod 400 ~/.ssh/hybrid-cloud-key.pem
+```
 
-# Configure credentials (enter Access Key, Secret Key, region, output format)
+---
+
+#### ✅ 5c. Security Group Created
+
+| Field | Value |
+|---|---|
+| **Security Group Name** | `hybrid-cloud-sg` |
+| **Security Group ID** | `sg-0312567d5a5a9df6d` |
+| **VPC** | `vpc-0a2263deb0f61b88b` |
+| **Region** | `us-east-1` |
+
+**Inbound Rules configured:**
+
+| Type | Port | Source | Purpose |
+|---|---|---|---|
+| SSH | 22 | 0.0.0.0/0 | SSH access to EC2 |
+| Custom TCP | 5000 | 0.0.0.0/0 | Flask app |
+| Custom TCP | 9090 | 0.0.0.0/0 | Prometheus |
+
+---
+
+#### ✅ 5d. Ubuntu 22.04 AMI Found (us-east-1)
+
+| Field | Value |
+|---|---|
+| **AMI ID** | `ami-00de3875b03809ec5` |
+| **AMI Name** | `ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-20260320` |
+| **Owner** | `099720109477` (Canonical) |
+| **Region** | `us-east-1` |
+
+---
+
+#### ✅ 5e. AWS CLI Configuration on the VM
+
+```bash
+sudo apt install -y awscli
 aws configure
 ```
 
-When prompted:
+When prompted, enter:
 
 ```
-AWS Access Key ID [None]: <YOUR_ACCESS_KEY>
-AWS Secret Access Key [None]: <YOUR_SECRET_KEY>
-Default region name [None]: us-east-1
-Default output format [None]: json
+AWS Access Key ID:     AKIA3MYREF4BBRCQDNTC
+AWS Secret Access Key: <enter your secret key — do NOT store in this file>
+Default region name:   us-east-1
+Default output format: json
 ```
 
 **Verify AWS access:**
@@ -437,9 +469,11 @@ aws sts get-caller-identity
 # Should print your account ID and IAM user ARN
 ```
 
-#### 5f. Update `autoscale/config.py`
+---
 
-Open the config file and replace the placeholder values:
+#### ✅ 5f. Update `autoscale/config.py`
+
+The config file has been updated with the actual resource values:
 
 ```python
 """Configuration for hybrid cloud auto-scaling."""
@@ -448,19 +482,27 @@ PROMETHEUS_URL = "http://localhost:9090/api/v1/query"
 THRESHOLD = 75.0          # percentage — scale when CPU or RAM exceeds this
 CHECK_INTERVAL = 30       # seconds between each Prometheus poll
 
-AWS_REGION = "ap-east-1"                # ← your AWS region
-AMI_ID = "ami-0c55b159cbfafe1f0"         # ← Ubuntu 22.04 AMI for your region
-INSTANCE_TYPE = "t2.micro"               # ← free-tier eligible
-KEY_NAME = "your-key-pair"               # ← name of your EC2 key pair (Step 5b)
-SECURITY_GROUP = "sg-xxxxxxxx"           # ← your security group ID (Step 5c)
+AWS_REGION = "us-east-1"
+AMI_ID = "ami-00de3875b03809ec5"         # Ubuntu 22.04 LTS (us-east-1)
+INSTANCE_TYPE = "t2.micro"               # free-tier eligible
+KEY_NAME = "hybrid-cloud-key"            # EC2 key pair name
+SECURITY_GROUP = "sg-0312567d5a5a9df6d"  # hybrid-cloud-sg
 
 INSTANCE_NAME_TAG = "AutoScaled-from-LocalVM"
 ```
 
-**You must update these three values:**
-- `AMI_ID` — the AMI from Step 5d
-- `KEY_NAME` — the key pair name from Step 5b (just the name, not the `.pem` path)
-- `SECURITY_GROUP` — the security group ID from Step 5c
+---
+
+#### Summary of All Resource IDs
+
+| Resource | Value |
+|---|---|
+| **AMI ID** | `ami-00de3875b03809ec5` |
+| **Key Pair** | `hybrid-cloud-key` |
+| **Security Group ID** | `sg-0312567d5a5a9df6d` |
+| **Region** | `us-east-1` |
+| **IAM User** | `hybrid-cloud-autoscaler` |
+| **Access Key ID** | `AKIA3MYREF4BBRCQDNTC` |
 
 ---
 

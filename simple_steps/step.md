@@ -69,11 +69,14 @@ sudo mv node_exporter-1.8.1.linux-amd64/node_exporter /usr/local/bin/
 rm -rf node_exporter-1.8.1.linux-amd64*
 ```
 
-Create the systemd service - **`/etc/systemd/system/node_exporter.service`**:
+Create the systemd service - **`/etc/systemd/system/node_exporter.service`** (detailed):
 
-```ini
+1. Create/edit the unit file directly from terminal:
+
+```bash
+sudo tee /etc/systemd/system/node_exporter.service > /dev/null << 'EOF'
 [Unit]
-Description=Node Exporter
+Description=Node Exporter service for Prometheus
 Wants=network-online.target
 After=network-online.target
 
@@ -81,12 +84,48 @@ After=network-online.target
 User=node_exporter
 Group=node_exporter
 Type=simple
+ExecStart=/usr/local/bin/node_exporter \
+	--web.listen-address=:9100
 Restart=on-failure
 RestartSec=5s
-ExecStart=/usr/local/bin/node_exporter
+NoNewPrivileges=true
 
 [Install]
 WantedBy=multi-user.target
+EOF
+```
+
+2. Understand what each key line does:
+	 - `Wants` + `After`: starts service only after networking is up.
+	 - `User`/`Group`: runs as a restricted non-login account (`node_exporter`) for security.
+	 - `ExecStart`: actual binary and listening port.
+	 - `Restart=on-failure`: auto-recovers from crashes.
+	 - `NoNewPrivileges=true`: blocks privilege escalation.
+	 - `WantedBy=multi-user.target`: enables startup at boot.
+
+3. Reload systemd and start the service:
+
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable --now node_exporter
+```
+
+4. Verify service health:
+
+```bash
+sudo systemctl status node_exporter --no-pager
+sudo journalctl -u node_exporter -n 50 --no-pager
+curl -s http://localhost:9100/metrics | head -20
+```
+
+Expected result: status should be `active (running)` and `/metrics` should return many lines like `node_cpu_seconds_total`.
+
+If it fails, run these quick checks:
+
+```bash
+ls -l /usr/local/bin/node_exporter
+sudo ss -lntp | grep 9100
+sudo journalctl -u node_exporter --no-pager | tail -50
 ```
 
 Enable and start:
@@ -117,27 +156,88 @@ sudo mv consoles console_libraries /etc/prometheus/
 cd .. && rm -rf prometheus-2.53.0.linux-amd64*
 ```
 
-Create **`/etc/prometheus/prometheus.yml`**:
+Create **`/etc/prometheus/prometheus.yml`** (detailed):
 
-```yaml
-global:
-  scrape_interval: 10s
+1. Ensure the config directory exists:
 
-scrape_configs:
-  - job_name: "prometheus"
-	static_configs:
-	  - targets: ["localhost:9090"]
-
-  - job_name: "node_exporter"
-	static_configs:
-	  - targets: ["localhost:9100"]
+```bash
+sudo mkdir -p /etc/prometheus
 ```
 
-Create the systemd service - **`/etc/systemd/system/prometheus.service`**:
+2. If a config already exists, take a backup first:
 
-```ini
+```bash
+if [ -f /etc/prometheus/prometheus.yml ]; then
+	sudo cp /etc/prometheus/prometheus.yml /etc/prometheus/prometheus.yml.bak.$(date +%Y%m%d-%H%M%S)
+fi
+```
+
+3. Create the file from terminal:
+
+```bash
+sudo tee /etc/prometheus/prometheus.yml > /dev/null << 'EOF'
+global:
+	scrape_interval: 10s
+	evaluation_interval: 10s
+
+scrape_configs:
+	- job_name: "prometheus"
+		static_configs:
+			- targets: ["localhost:9090"]
+
+	- job_name: "node_exporter"
+		static_configs:
+			- targets: ["localhost:9100"]
+EOF
+```
+
+4. Quick explanation of this config:
+	 - `scrape_interval: 10s`: collect fresh metrics every 10 seconds.
+	 - `evaluation_interval: 10s`: evaluate rules every 10 seconds.
+	 - `job_name: "prometheus"`: monitors Prometheus itself.
+	 - `job_name: "node_exporter"`: collects host CPU, memory, disk, and network metrics from port 9100.
+
+5. Validate config syntax before restart:
+
+```bash
+sudo /usr/local/bin/promtool check config /etc/prometheus/prometheus.yml
+```
+
+Expected output should include: `SUCCESS: ... is valid prometheus config file syntax`.
+
+6. Set permissions and restart Prometheus:
+
+```bash
+sudo chown prometheus:prometheus /etc/prometheus/prometheus.yml
+sudo systemctl restart prometheus
+sudo systemctl status prometheus --no-pager
+```
+
+7. Verify targets are being scraped:
+
+```bash
+curl -s http://localhost:9090/-/ready
+curl -s http://localhost:9090/api/v1/targets | grep -E '"job"|"health"|"lastError"' | head -40
+```
+
+Expected result:
+	 - readiness endpoint should return `Prometheus is Ready.`
+	 - both jobs (`prometheus`, `node_exporter`) should show healthy/UP.
+
+If something is wrong, check logs:
+
+```bash
+sudo journalctl -u prometheus -n 80 --no-pager
+```
+
+Create the systemd service - **`/etc/systemd/system/prometheus.service`** (detailed):
+
+1. Create/edit the unit file from terminal:
+
+```bash
+sudo tee /etc/systemd/system/prometheus.service > /dev/null << 'EOF'
 [Unit]
-Description=Prometheus
+Description=Prometheus monitoring server
 Wants=network-online.target
 After=network-online.target
 
@@ -145,28 +245,73 @@ After=network-online.target
 User=prometheus
 Group=prometheus
 Type=simple
-Restart=on-failure
-RestartSec=5s
 ExecStart=/usr/local/bin/prometheus \
   --config.file=/etc/prometheus/prometheus.yml \
   --storage.tsdb.path=/var/lib/prometheus \
   --web.console.templates=/etc/prometheus/consoles \
   --web.console.libraries=/etc/prometheus/console_libraries \
   --web.listen-address=0.0.0.0:9090
+Restart=on-failure
+RestartSec=5s
+NoNewPrivileges=true
+LimitNOFILE=65536
 
 [Install]
 WantedBy=multi-user.target
+EOF
 ```
 
-Set permissions and start:
+2. Why these directives matter:
+	- `Wants` + `After`: waits for network readiness.
+	- `User`/`Group`: runs Prometheus as non-root user.
+	- `ExecStart`: points to binary, config, storage path, console paths, and listen port.
+	- `Restart=on-failure`: recovers automatically if the process crashes.
+	- `NoNewPrivileges=true`: basic hardening to reduce privilege escalation risk.
+	- `LimitNOFILE=65536`: avoids low file descriptor limits on busy setups.
+
+3. Ensure Prometheus owns its config and data paths:
 
 ```bash
 sudo chown -R prometheus:prometheus /etc/prometheus /var/lib/prometheus
+```
+
+4. Reload systemd and start at boot:
+
+```bash
 sudo systemctl daemon-reload
 sudo systemctl enable --now prometheus
 ```
 
-Verify: browse to `http://<VM_IP>:9090` -> Status -> Targets — both jobs should show **UP**. [scribd](https://www.scribd.com/document/800568752/prome-installation)
+5. Verify service health and startup behavior:
+
+```bash
+sudo systemctl status prometheus --no-pager
+sudo systemctl is-enabled prometheus
+sudo ss -lntp | grep :9090
+curl -s http://localhost:9090/-/ready
+```
+
+Expected result:
+	- status is `active (running)`
+	- service is `enabled`
+	- port `9090` is listening
+	- readiness endpoint returns `Prometheus is Ready.`
+
+6. Verify scrape targets in UI:
+	- Open `http://<VM_IP>:9090`.
+	- Go to **Status -> Targets**.
+	- Confirm both `prometheus` and `node_exporter` are **UP**.
+
+7. If service fails, use these troubleshooting commands:
+
+```bash
+sudo journalctl -u prometheus -n 120 --no-pager
+sudo /usr/local/bin/promtool check config /etc/prometheus/prometheus.yml
+ls -ld /etc/prometheus /var/lib/prometheus
+ls -l /usr/local/bin/prometheus
+```
+
+Common causes: YAML indentation errors, wrong file ownership, missing binary, or port conflict on `9090`.
 
 ***
 

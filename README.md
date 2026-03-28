@@ -401,17 +401,47 @@ All substeps completed successfully. Below is a full summary of everything that 
 
 | Field | Value |
 |---|---|
-| **Key Pair Name** | `hybrid-cloud-key` |
+| **Key Pair Name** | `mh-vm1` |
 | **Format** | `.pem` |
 | **Region** | `us-east-1` |
 
 **Steps taken:**
-1. EC2 Console → Key Pairs → Create Key Pair → `hybrid-cloud-key`, `.pem` format.
+1. EC2 Console → Key Pairs → Create Key Pair → `mh-vm1`, `.pem` format.
 2. `.pem` file downloaded automatically. Move it to a safe location and set permissions:
 
 ```bash
-mv hybrid-cloud-key.pem ~/.ssh/
-chmod 400 ~/.ssh/hybrid-cloud-key.pem
+mv mh-vm1.pem ~/.ssh/
+chmod 400 ~/.ssh/mh-vm1.pem
+```
+
+---
+
+#### ✅ 5b-ii. Place the `.pem` Key on mh-vm1
+
+The `mh-vm1.pem` file is currently inside the repo at `autoscale/mh-vm1.pem`. Move it to the standard SSH directory on the VM:
+
+```bash
+# On mh-vm1 — move key out of the repo into ~/.ssh/
+mkdir -p ~/.ssh
+mv ~/IITJ_VCC_A3/autoscale/mh-vm1.pem ~/.ssh/mh-vm1.pem
+
+# Set strict permissions (SSH will refuse the key otherwise)
+chmod 400 ~/.ssh/mh-vm1.pem
+
+# Verify
+ls -la ~/.ssh/mh-vm1.pem
+```
+
+Expected output:
+```
+-r-------- 1 mh-vm1 mh-vm1 1674 Mar 28 18:00 /home/mh-vm1/.ssh/mh-vm1.pem
+```
+
+> **Why move it out of the repo?** `.pem` private keys must never be committed to git. Moving to `~/.ssh/` keeps it secure and outside version control.
+
+To SSH into the EC2 instance after it launches:
+```bash
+ssh -i ~/.ssh/mh-vm1.pem ubuntu@<EC2_PUBLIC_IP>
 ```
 
 ---
@@ -482,7 +512,7 @@ aws sts get-caller-identity
 | `AWS_REGION` | Which AWS region to launch EC2 in | `us-east-1` |
 | `AMI_ID` | OS image used for the EC2 instance | `ami-00de3875b03809ec5` (Ubuntu 22.04, us-east-1) |
 | `INSTANCE_TYPE` | EC2 size (free-tier eligible) | `t2.micro` |
-| `KEY_NAME` | EC2 key pair name for SSH access | `hybrid-cloud-key` |
+| `KEY_NAME` | EC2 key pair name for SSH access | `mh-vm1` |
 | `SECURITY_GROUP` | Firewall rules allowing ports 22, 5000, 9090 | `sg-0312567d5a5a9df6d` |
 
 **How to apply it on the VM (inside mh-vm1):**
@@ -509,7 +539,7 @@ CHECK_INTERVAL = 30       # seconds between each Prometheus poll
 AWS_REGION = "us-east-1"
 AMI_ID = "ami-00de3875b03809ec5"         # Ubuntu 22.04 LTS (us-east-1)
 INSTANCE_TYPE = "t2.micro"               # free-tier eligible
-KEY_NAME = "hybrid-cloud-key"            # EC2 key pair name
+KEY_NAME = "mh-vm1"                      # EC2 key pair name
 SECURITY_GROUP = "sg-0312567d5a5a9df6d"  # hybrid-cloud-sg
 
 INSTANCE_NAME_TAG = "AutoScaled-from-LocalVM"
@@ -524,7 +554,7 @@ INSTANCE_NAME_TAG = "AutoScaled-from-LocalVM"
 | Resource | Value |
 |---|---|
 | **AMI ID** | `ami-00de3875b03809ec5` |
-| **Key Pair** | `hybrid-cloud-key` |
+| **Key Pair** | `mh-vm1` |
 | **Security Group ID** | `sg-0312567d5a5a9df6d` |
 | **Region** | `us-east-1` |
 | **IAM User** | `hybrid-cloud-autoscaler` |
@@ -746,7 +776,7 @@ All tuneable parameters live in `autoscale/config.py`:
 | `AWS_REGION` | `us-east-1` | AWS region for the EC2 instance |
 | `AMI_ID` | `ami-00de3875b03809ec5` | Ubuntu 22.04 AMI ID (us-east-1) |
 | `INSTANCE_TYPE` | `t2.micro` | EC2 instance type (free-tier eligible) |
-| `KEY_NAME` | `hybrid-cloud-key` | EC2 key pair name |
+| `KEY_NAME` | `mh-vm1` | EC2 key pair name |
 | `SECURITY_GROUP` | `sg-0312567d5a5a9df6d` | EC2 security group ID |
 | `INSTANCE_NAME_TAG` | `AutoScaled-from-LocalVM` | Name tag applied to the launched instance |
 

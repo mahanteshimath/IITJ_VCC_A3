@@ -98,11 +98,15 @@ Before starting, make sure you have:
 
    | Setting | Value |
    |---|---|
-   | Name | `hybrid-cloud-vm` |
+   | Name | `mh-vm` |
    | Type / Version | Linux / Ubuntu (64-bit) |
-   | CPUs | **2** (minimum — needed to generate meaningful CPU metrics) |
-   | RAM | **2048 MB** (2 GB minimum) |
-   | Disk | **20 GB** (dynamically allocated VDI) |
+   | CPUs | **3** (minimum — needed to generate meaningful CPU metrics) |
+   | RAM | **3710 MB** (2 GB minimum) |
+   | Disk | **25 GB** (dynamically allocated VDI) |
+
+
+![alt text](image.png)
+
 
 4. **Attach the ISO** to the VM's optical drive and boot it.
 5. **Install Ubuntu** — follow the installer defaults; create a user (e.g., `ubuntu`).
@@ -116,7 +120,8 @@ Before starting, make sure you have:
    ip addr show          # note the IP address (e.g., 192.168.1.105)
    ping -c 3 google.com  # confirm internet access
    ```
-
+![alt text](image-1.png)
+![alt text](image-2.png)
 8. **Update the system and install base packages**:
 
    ```bash
@@ -127,7 +132,7 @@ Before starting, make sure you have:
 9. **Clone this repository** inside the VM:
 
    ```bash
-   git clone https://github.com/<your-username>/IITJ_VCC_A3.git
+   git clone https://github.com/mahanteshimath/IITJ_VCC_A3.git
    cd IITJ_VCC_A3
    ```
 

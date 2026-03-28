@@ -276,7 +276,7 @@ scrape_configs:
 
 ```bash
 # 1) Check Prometheus sees the node target as UP
-curl -s 'http://localhost:9090/api/v1/query?query=up{job="node"}' | python3 -m json.tool
+curl -sG --data-urlencode 'query=up{job="node"}' http://localhost:9090/api/v1/query | python3 -m json.tool
 
 # 2) Confirm a Node Exporter metric is being scraped
 curl -s 'http://localhost:9090/api/v1/query?query=node_cpu_seconds_total' | python3 -m json.tool

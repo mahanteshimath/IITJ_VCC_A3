@@ -199,6 +199,35 @@ sudo mv prometheus-2.48.0.linux-amd64 /opt/prometheus
 sudo cp monitoring/prometheus.yml /opt/prometheus/prometheus.yml
 ```
 ![alt text](image-9.png)
+
+**Create or overwrite from terminal (Ubuntu VM):**
+
+Go to repo root:
+
+```bash
+cd ~/IITJ_VCC_A3
+```
+
+Ensure folder exists:
+
+```bash
+mkdir -p monitoring
+```
+
+Create or replace file:
+
+```bash
+cat > monitoring/prometheus.yml << 'EOF'
+global:
+   scrape_interval: 10s
+
+scrape_configs:
+   - job_name: 'node'
+      static_configs:
+         - targets: ['localhost:9100']
+EOF
+```
+
 **What the config does** (`monitoring/prometheus.yml`):
 
 ```yaml
@@ -210,6 +239,45 @@ scrape_configs:
     static_configs:
       - targets: ['localhost:9100']   # Node Exporter endpoint
 ```
+
+**Line-by-line explanation:**
+
+1. `global:` defines default behavior for all scrape jobs unless overridden later.
+2. `scrape_interval: 10s` tells Prometheus to pull fresh metrics every 10 seconds.
+3. `scrape_configs:` starts the list of metric collection jobs.
+4. `job_name: 'node'` creates a logical label (`job="node"`) used in PromQL and Grafana filters.
+5. `static_configs:` means targets are manually defined (not auto-discovered).
+6. `targets: ['localhost:9100']` points to Node Exporter running on the same VM at port 9100.
+
+**Why these values are used in this project:**
+
+1. A 10-second scrape gives enough resolution to catch short CPU spikes from the stress test.
+2. `localhost` is correct because Prometheus and Node Exporter are both on the same VM.
+3. One simple static target keeps setup easy and reproducible for assignment/demo use.
+
+**How this impacts your dashboards and auto-scale script:**
+
+1. Grafana panels read the same time-series data collected by this config.
+2. `autoscale/monitor_and_scale.py` queries Prometheus API, so stale or missing scrape data directly affects scale decisions.
+3. If this target is down, your CPU/memory queries may return empty results and scaling logic can fail.
+
+**Quick validation after starting Prometheus:**
+
+```bash
+# 1) Check Prometheus sees the node target as UP
+curl -s 'http://localhost:9090/api/v1/query?query=up{job="node"}' | python3 -m json.tool
+
+# 2) Confirm a Node Exporter metric is being scraped
+curl -s 'http://localhost:9090/api/v1/query?query=node_cpu_seconds_total' | python3 -m json.tool
+```
+
+Expected behavior: the `up{job="node"}` query returns value `1`, which means Prometheus can scrape Node Exporter successfully.
+
+**If your setup differs:**
+
+1. If Node Exporter runs on another machine, replace `localhost` with that machine's IP or hostname.
+2. If you need lighter load on low-resource VMs, increase `scrape_interval` to `15s` or `30s`.
+3. If you need faster detection, reduce interval (for example `5s`) but expect more Prometheus overhead.
 
 **Start Prometheus:**
 

@@ -3,3 +3,6 @@ set -euo pipefail
 
 sudo apt install -y stress
 stress --cpu 4 --timeout 120s
+
+
+#pRqYUEWHhAsb4Y+ByzeLzWwryP17afxuZPR90zJ

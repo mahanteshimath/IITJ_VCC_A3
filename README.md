@@ -198,6 +198,19 @@ sudo mv prometheus-2.48.0.linux-amd64 /opt/prometheus
 # Copy the config from this repo (scrapes localhost:9100 every 10s)
 sudo cp monitoring/prometheus.yml /opt/prometheus/prometheus.yml
 ```
+
+**Optional: download Prometheus on Windows host and use in Ubuntu VM**
+
+
+```bash
+cd ~/IITJ_VCC_A3/prometheus
+tar -xvf prometheus-2.48.0.linux-amd64.tar.gz
+sudo mv prometheus-2.48.0.linux-amd64 /opt/prometheus
+sudo cp ~/IITJ_VCC_A3/monitoring/prometheus.yml /opt/prometheus/prometheus.yml
+pkill prometheus || true
+cd /opt/prometheus && ./prometheus &
+```
+
 ![alt text](image-9.png)
 
 **Create or overwrite from terminal (Ubuntu VM):**
@@ -314,6 +327,14 @@ echo "deb https://apt.grafana.com stable main" | sudo tee /etc/apt/sources.list.
 sudo apt update && sudo apt install grafana -y
 
 # Enable and start Grafana
+sudo systemctl enable --now grafana-server
+```
+
+
+```bash
+cd ~/IITJ_VCC_A3/grafana
+sudo dpkg -i grafana_12.4.2_amd64.deb
+sudo apt -f install -y
 sudo systemctl enable --now grafana-server
 ```
 

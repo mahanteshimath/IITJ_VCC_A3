@@ -1,0 +1,6 @@
+
+# Local downloaded installers/artifacts
+grafana/*.deb
+prometheus/*.zip
+prometheus/*.tar.gz
+prometheus/*.tgz

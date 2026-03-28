@@ -296,7 +296,7 @@ curl -s 'http://localhost:9090/api/v1/query?query=up' | python3 -m json.tool
 # Expected: "value": [..., "1"] meaning the node target is UP
 ```
 
-> You can also open `http://<VM_IP>:9090` in your host browser to use the Prometheus web UI.
+> You can also open `http://192.168.1.40:9090` in your host browser to use the Prometheus web UI.
 
 ---
 
@@ -327,7 +327,7 @@ sudo systemctl status grafana-server   # should be "active (running)"
 
 **Configure Grafana** (from your host browser):
 
-1. Open `http://<VM_IP>:3000` — default login is `admin` / `admin` (you'll be prompted to change it).
+1. Open `http://192.168.1.40:3000` — default login is `admin` / `admin` (you'll be prompted to change it).
 2. **Add Prometheus as a data source:**
    - Go to ⚙️ **Configuration → Data Sources → Add data source**.
    - Select **Prometheus**.
@@ -470,7 +470,7 @@ Expected output:
  * Running on http://0.0.0.0:5000
 ```
 
-**Verify:** Open `http://<VM_IP>:5000` in your host browser — you should see `Running on Local VM`.
+**Verify:** Open `http://192.168.1.40:5000` in your host browser — you should see `Running on Local VM`.
 
 #### Terminal 2 — Start the monitor script
 
@@ -535,7 +535,7 @@ Once the instance state is `running` and it has a public IP, open `http://<EC2_P
 
 **Watch it in Grafana:**
 
-Open `http://<VM_IP>:3000` and view the dashboard — you'll see the CPU spike during the stress test, the threshold line at 75%, and the moment scaling was triggered.
+Open `http://192.168.1.40:3000` and view the dashboard — you'll see the CPU spike during the stress test, the threshold line at 75%, and the moment scaling was triggered.
 
 ---
 

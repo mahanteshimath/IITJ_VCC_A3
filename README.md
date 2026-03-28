@@ -401,7 +401,7 @@ When prompted:
 ```
 AWS Access Key ID [None]: <YOUR_ACCESS_KEY>
 AWS Secret Access Key [None]: <YOUR_SECRET_KEY>
-Default region name [None]: ap-south-1
+Default region name [None]: us-east-1
 Default output format [None]: json
 ```
 

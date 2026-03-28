@@ -339,6 +339,8 @@ sudo systemctl enable --now grafana-server
 sudo systemctl status grafana-server   # should be "active (running)"
 ```
 ![alt text](grafana1.png)
+
+![alt text](grafana2.png)
 **Configure Grafana** (from your host browser):
 
 1. Open `http://192.168.1.40:3000` — default login is `admin` / `admin` (you'll be prompted to change it).

@@ -587,6 +587,8 @@ Expected output:
 
 **Verify:** Open `http://192.168.56.10:5000` in your host browser — you should see `Running on Local VM`.
 
+![alt text](localFlask.png)
+
 #### Terminal 2 — Start the monitor script
 
 ```bash

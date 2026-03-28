@@ -117,7 +117,7 @@ Before starting, make sure you have:
 7. **Verify networking** from inside the VM:
 
    ```bash
-   ip addr show          # note the IP address (e.g., 192.168.1.105)
+   ip addr show          # note the IP address (e.g., 192.168.56.10 )
    ping -c 3 google.com  # confirm internet access
    ```
 
@@ -508,7 +508,7 @@ Expected output:
  * Running on http://0.0.0.0:5000
 ```
 
-**Verify:** Open `http://192.168.1.40:5000` in your host browser — you should see `Running on Local VM`.
+**Verify:** Open `http://192.168.56.10:5000` in your host browser — you should see `Running on Local VM`.
 
 #### Terminal 2 — Start the monitor script
 
@@ -574,7 +574,7 @@ Once the instance state is `running` and it has a public IP, open `http://<EC2_P
 
 **Watch it in Grafana:**
 
-Open `http://192.168.1.40:3000` and view the dashboard — you'll see the CPU spike during the stress test, the threshold line at 75%, and the moment scaling was triggered.
+Open `http://192.168.56.10:3000` and view the dashboard — you'll see the CPU spike during the stress test, the threshold line at 75%, and the moment scaling was triggered.
 
 ---
 
@@ -697,10 +697,10 @@ git push origin main
 
 | Service | Live URL |
 |---|---|
-| Grafana | [http://192.168.1.40:3000](http://192.168.1.40:3000) |
-| Prometheus | [http://192.168.1.40:9090](http://192.168.1.40:9090) |
-| Flask App | [http://192.168.1.40:5000](http://192.168.1.40:5000) |
-| Node Exporter | [http://192.168.1.40:9100/metrics](http://192.168.1.40:9100/metrics) |
+| Grafana | [http://192.168.56.10:3000](http://192.168.1.40:3000) |
+| Prometheus | [http://192.168.56.10:9090](http://192.168.1.40:9090) |
+| Flask App | [http://192.168.56.10:5000](http://192.168.1.40:5000) |
+| Node Exporter | [http://192.168.56.10:9100/metrics](http://192.168.1.40:9100/metrics) |
 
 ## Node Exporter 
 ![alt text](image-11.png)

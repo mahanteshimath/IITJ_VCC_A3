@@ -367,6 +367,11 @@ The custom dashboard (`grafana-dashboard.json`) shows two panels:
 
 These are the exact same queries the auto-scale script uses, so what you see in Grafana matches what triggers scaling.
 
+
+
+
+![alt text](grafana4.png)
+
 ---
 
 ### Step 5: Configure AWS Credentials & Resources

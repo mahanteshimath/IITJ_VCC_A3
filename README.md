@@ -34,8 +34,7 @@
               └───────────────────────┘
 ```
 
-<img width="1338" height="1622" alt="mermaid-diagram-2026-03-29-035717" src="https://github.com/user-attachments/assets/635b9231-c2d8-46b5-8683-d6e8f431baa2" />
-
+![alt text](Arch.png)
 
 **How it works, end-to-end:**
 

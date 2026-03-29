@@ -853,12 +853,13 @@ git push origin main
 | Flask App | [http://192.168.56.10:5000](http://192.168.56.10:5000) |
 | Node Exporter | [http://192.168.56.10:9100/metrics](http://192.168.56.10:9100/metrics) |
 
-## Node Exporter 
-![alt text](image-11.png)
 -----
 ## Prometheus
 ![alt text](image-1.png)
 
 ---
-##Grafhana
+## Grafhana
 ![alt text](image.png)
+---
+## Simple flask app
+![alt text](image-2.png)

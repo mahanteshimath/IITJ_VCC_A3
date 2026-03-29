@@ -729,9 +729,11 @@ Open `http://192.168.56.10:3000` and view the dashboard — you'll see the CPU s
 
 The core logic is in `autoscale/monitor_and_scale.py`:
 
+![alt text](newec2.png)
+
 ```
 
-![alt text](newec2.png)
+
 ┌─────────────────────────────┐
 │     Start monitoring loop   │
 └──────────┬──────────────────┘
